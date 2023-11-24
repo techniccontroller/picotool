@@ -69,7 +69,7 @@ $ picotool help
 PICOTOOL:
     Tool for interacting with a RP2040 device in BOOTSEL mode, or with a RP2040 binary
 
-SYNOPSYS:
+SYNOPSIS:
     picotool info [-b] [-p] [-d] [-l] [-a] [--bus <bus>] [--address <addr>] [-f] [-F]
     picotool info [-b] [-p] [-d] [-l] [-a] <filename> [-t <type>]
     picotool load [-n] [-N] [-u] [-v] [-x] <filename> [-t <type>] [-o <offset>] [--bus <bus>] [--address <addr>] [-f] [-F]
@@ -110,7 +110,7 @@ INFO:
     Display information from the target device(s) or file.
     Without any arguments, this will display basic information for all connected RP2040 devices in BOOTSEL mode
 
-SYNOPSYS:
+SYNOPSIS:
     picotool info [-b] [-p] [-d] [-l] [-a] [--bus <bus>] [--address <addr>] [-f] [-F]
     picotool info [-b] [-p] [-d] [-l] [-a] <filename> [-t <type>]
 
@@ -145,7 +145,6 @@ TARGET SELECTION:
             The file name
         -t <type>
             Specify file type (uf2 | elf | bin) explicitly, ignoring file extension
-
 ```
 
 Note the -f arguments vary slightly for Windows vs macOS / Unix platforms.
@@ -209,6 +208,63 @@ Build Information
  build date:  Dec 31 2020
 ```
 
+## load
+
+Load allows you to write data from a file into flash
+
+```text
+$ picotool help load
+LOAD:
+    Load the program / memory range stored in a file onto the device.
+
+SYNOPSIS:
+    picotool load [-n] [-N] [-u] [-v] [-x] <filename> [-t <type>] [-o <offset>] [--bus <bus>] [--address <addr>] [-f] [-F]
+
+OPTIONS:
+    Post load actions
+        -n, --no-overwrite
+            When writing flash data, do not overwrite an existing program in flash. If picotool cannot determine the size/presence
+            of the program in flash, the command fails
+        -N, --no-overwrite-unsafe
+            When writing flash data, do not overwrite an existing program in flash. If picotool cannot determine the size/presence
+            of the program in flash, the load continues anyway
+        -u, --update
+            Skip writing flash sectors that already contain identical data
+        -v, --verify
+            Verify the data was written correctly
+        -x, --execute
+            Attempt to execute the downloaded file as a program after the load
+    File to load from
+        <filename>
+            The file name
+        -t <type>
+            Specify file type (uf2 | elf | bin) explicitly, ignoring file extension
+    BIN file options
+        -o, --offset
+            Specify the load address for a BIN file
+        <offset>
+            Load offset (memory address; default 0x10000000)
+    Target device selection
+        --bus <bus>
+            Filter devices by USB bus number
+        --address <addr>
+            Filter devices by USB device address
+        -f, --force
+            Force a device not in BOOTSEL mode but running compatible code to reset so the command can be executed. After executing
+            the command (unless the command itself is a 'reboot') the device will be rebooted back to application mode
+        -F, --force-no-reboot
+            Force a device not in BOOTSEL mode but running compatible code to reset so the command can be executed. After executing
+            the command (unless the command itself is a 'reboot') the device will be left connected and accessible to picotool, but
+            without the RPI-RP2 drive mounted
+```
+
+e.g.
+
+```text
+$ picotool load blink.uf2
+Loading into Flash: [==============================]  100%
+```
+
 ## save
 
 Save allows you to save a range of memory or a program or the whole of flash from the device to a BIN file or a UF2 file
@@ -218,7 +274,7 @@ $ picotool help save
 SAVE:
     Save the program / memory stored in flash on the device to a file.
 
-SYNOPSYS:
+SYNOPSIS:
     picotool save [-p] [--bus <bus>] [--address <addr>] [-f] [-F] <filename> [-t <type>]
     picotool save -a [--bus <bus>] [--address <addr>] [-f] [-F] <filename> [-t <type>]
     picotool save -r <from> <to> [--bus <bus>] [--address <addr>] [-f] [-F] <filename> [-t <type>]
